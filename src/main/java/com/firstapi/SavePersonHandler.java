@@ -25,7 +25,7 @@ implements RequestHandler<PersonRequest, PersonResponse> {
    
   private AmazonDynamoDB dynamoDb;
   private String DYNAMODB_TABLE_NAME = "Person";
-  private Regions REGION = Regions.US_WEST_2;
+  private Regions REGION = Regions.US_EAST_1;
 
   public PersonResponse handleRequest(
     PersonRequest personRequest, Context context) {
@@ -47,13 +47,18 @@ implements RequestHandler<PersonRequest, PersonResponse> {
             .withString("firstName", personRequest.getFirstName())
             .withString("lastName", personRequest.getLastName());
         */
+	  //String name="name";
 	  String name="name";
-	  AttributeValue av=new AttributeValue("mohit");
+	  String personname=personRequest.getFirstName()+personRequest.getLastName();
+	  AttributeValue av=new AttributeValue(personname);
 	 // av.addMEntry("name",av);
 	  Map<String,AttributeValue> item=new HashMap<String,AttributeValue>();
 	  item.put(name,av);
 	  PutItemRequest pir=new PutItemRequest(DYNAMODB_TABLE_NAME, item);
 	  PutItemResult piresult=dynamoDb.putItem(pir);
+	  
+	  
+	  //
 	  
       return null;    
           

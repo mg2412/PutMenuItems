@@ -8,6 +8,7 @@ public class PersonResponse {
 
 	public void setMessage(String message) {
 		this.message = message;
+		
 	}
      
     // standard getters and setters

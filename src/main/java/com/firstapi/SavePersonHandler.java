@@ -18,50 +18,35 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Iterator;
+
+import org.json.*;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 
 public class SavePersonHandler 
-implements RequestHandler<PersonRequest, PersonResponse> {
+implements RequestHandler<Object, String> {
    
   private AmazonDynamoDB dynamoDb;
-  private String DYNAMODB_TABLE_NAME = "Person";
+  private String DYNAMODB_TABLE_NAME = "menu_items";
   private Regions REGION = Regions.US_EAST_1;
 
-  public PersonResponse handleRequest(
-    PersonRequest personRequest, Context context) {
+  public String handleRequest(Object input, Context context) {
 
       this.initDynamoDbClient();
+	  
+		String s="{a: i}";
+		JSONObject obj=new JSONObject(s);
+        String name=obj.getString("a");
+		System.out.println("name is "+name);
+	  return null;
       
-      persistData(personRequest);
-
-      PersonResponse personResponse = new PersonResponse();
-      personResponse.setMessage("Saved Successfully!!!");
-      return personResponse;
-  }
-
-  private PutItemOutcome persistData(PersonRequest personRequest) 
-    throws ConditionalCheckFailedException {
-      /*return this.dynamoDb.getTable(DYNAMODB_TABLE_NAME)
-        .putItem(
-          new PutItemSpec().withItem(new Item()
-            .withString("firstName", personRequest.getFirstName())
-            .withString("lastName", personRequest.getLastName());
-        */
-	  //String name="name";
-	  String name="name";
-	  String personname=personRequest.getFirstName()+personRequest.getLastName();
-	  AttributeValue av=new AttributeValue(personname);
-	 // av.addMEntry("name",av);
-	  Map<String,AttributeValue> item=new HashMap<String,AttributeValue>();
-	  item.put(name,av);
-	  PutItemRequest pir=new PutItemRequest(DYNAMODB_TABLE_NAME, item);
-	  PutItemResult piresult=dynamoDb.putItem(pir);
-	  
-	  
-	  ///
-	  
-      return null;    
-          
   }
 
   private void initDynamoDbClient() {
